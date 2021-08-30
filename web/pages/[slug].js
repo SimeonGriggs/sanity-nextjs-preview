@@ -17,8 +17,8 @@ function filterDataToSingleItem(data, preview) {
   }
 
   return data.length > 1 && preview
-    ? data.filter((item) => item._id.startsWith(`drafts.`)).pop()
-    : data.pop()
+    ? data.filter((item) => item._id.startsWith(`drafts.`)).slice(-1)[0]
+    : data.slice(-1)[0]
 }
 
 /**
