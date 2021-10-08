@@ -16,9 +16,15 @@ function filterDataToSingleItem(data, preview) {
     return data
   }
 
-  return data.length > 1 && preview
-    ? data.filter((item) => item._id.startsWith(`drafts.`)).slice(-1)[0]
-    : data.slice(-1)[0]
+  if (data.length === 1) {
+    return data[0]
+  }
+
+  if (preview) {
+    return data.find((item) => item._id.startsWith(`drafts.`)) || data[0]
+  }
+
+  return data[0]
 }
 
 /**
