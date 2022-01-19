@@ -14,7 +14,6 @@ module.exports = {
     'sanity/import',
     'plugin:react-hooks/recommended',
     'prettier',
-    'prettier/react',
   ],
   rules: {
     'no-use-before-define': 'off',
