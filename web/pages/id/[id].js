@@ -4,8 +4,8 @@ import {groq} from 'next-sanity'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 
-import {usePreviewSubscription} from '../lib/sanity'
-import {getClient} from '../lib/sanity.server'
+import {usePreviewSubscription} from '../../lib/sanity'
+import {getClient} from '../../lib/sanity.server'
 
 /**
  * Helper function to return the correct version of the document
@@ -28,37 +28,31 @@ function filterDataToSingleItem(data, preview) {
 }
 
 /**
- * Makes Next.js aware of all the slugs it can expect at this route
- *
- * See how we've mapped over our found slugs to add a `/` character?
- * Idea: Add these in Sanity and enforce them with validation rules :)
- * https://www.simeongriggs.dev/nextjs-sanity-slug-patterns
+ * Querying by _id is a bit special, firstly we'll accept any path
+ * fallback: `blocking` will render any page on-demand
  */
-export async function getStaticPaths() {
-  const allSlugsQuery = groq`*[defined(slug.current)][].slug.current`
-  const pages = await getClient().fetch(allSlugsQuery)
-
+export function getStaticPaths() {
   return {
-    paths: pages.map((slug) => `/${slug}`),
-    fallback: true,
+    paths: [],
+    fallback: `blocking`,
   }
 }
 
 /**
- * Fetch the data from Sanity based on the current slug
+ * When querying by _id, we need to be aware of
+ * the difference between our server-side and client-side query.
  *
- * Important: You _could_ query for just one document, like this:
- * *[slug.current == $slug][0]
- * ...but that won't return a draft document!
- * And you get a better editing experience
- * fetching draft/preview content server-side
- *
- * Also: You can ignore `preview = false` for now,
- * I'll explain "preview context" later on!
+ * Server-side, an authenticated Sanity Client
+ * will return draft + published documents...
  */
 export async function getStaticProps({params, preview = false}) {
-  const query = groq`*[_type == "article" && slug.current == $slug]`
-  const queryParams = {slug: params.slug}
+  const {id} = params
+  const publishedAndDraftIds = id.startsWith(`drafts.`)
+    ? [id, id.replace(`drafts.`, ``)]
+    : [id, `drafts.${id}`]
+
+  const query = groq`*[_id in $ids]`
+  const queryParams = {ids: publishedAndDraftIds}
   const data = await getClient(preview).fetch(query, queryParams)
 
   // Escape hatch, if our query failed to return data
@@ -82,8 +76,10 @@ export async function getStaticProps({params, preview = false}) {
 }
 
 /**
- * The `usePreviewSubscription` takes care of updating
- * the preview content on the client-side
+ * ... on the client-side, the `usePreviewSubscription` hook's
+ * groq-store does some magic to combine document data into published documents
+ 
+* This magic makes querying-by-ids work differently on the client-side
  */
 export default function Page({data, preview}) {
   const {asPath} = useRouter()
@@ -91,7 +87,7 @@ export default function Page({data, preview}) {
     params: data?.queryParams ?? {},
     // The hook needs to know what we started with, to return it immediately
     // This is what it's important to fetch draft content server-side!
-    initialData: data?.page,
+    initialData: [data?.page],
     // The passed-down preview context determines whether this function does anything
     enabled: preview,
   })

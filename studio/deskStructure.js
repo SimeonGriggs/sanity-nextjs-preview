@@ -11,7 +11,13 @@ export const getDefaultDocumentNode = () => {
       .options({
         url: (doc) => resolveProductionUrl(doc),
       })
-      .title('Preview'),
+      .title('Preview by Slug'),
+    S.view
+      .component(Iframe)
+      .options({
+        url: (doc) => resolveProductionUrl(doc, `_id`),
+      })
+      .title('Preview by ID'),
   ])
 }
 
