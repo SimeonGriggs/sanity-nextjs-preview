@@ -86,7 +86,7 @@ export default function Page({data, preview}) {
   const {data: previewData} = usePreviewSubscription(data?.query, {
     params: data?.queryParams ?? {},
     // The hook needs to know what we started with, to return it immediately
-    // This is what it's important to fetch draft content server-side!
+    // This is why it's important to fetch draft content server-side!
     initialData: [data?.page],
     // The passed-down preview context determines whether this function does anything
     enabled: preview,
