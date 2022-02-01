@@ -77,9 +77,9 @@ export async function getStaticProps({params, preview = false}) {
 
 /**
  * ... on the client-side, the `usePreviewSubscription` hook's
- * groq-store does some magic to combine document data into published documents
- 
-* This magic makes querying-by-ids work differently on the client-side
+ * groq-store does some magic to "overlay" draft documents data into published documents
+ *
+ * So you can't actually query by a draft _id becacuse it doesn't exist!
  */
 export default function Page({data, preview}) {
   const {asPath} = useRouter()
