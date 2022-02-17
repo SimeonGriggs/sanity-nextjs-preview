@@ -1,10 +1,9 @@
 // lib/sanity.js
-import {
-  createImageUrlBuilder,
-  createPortableTextComponent,
-  createPreviewSubscriptionHook,
-  createCurrentUserHook,
-} from 'next-sanity'
+import React from 'react'
+import {createPreviewSubscriptionHook, createCurrentUserHook} from 'next-sanity'
+import createImageUrlBuilder from '@sanity/image-url'
+import {PortableText as PortableTextComponent} from '@portabletext/react'
+
 import {config} from './config'
 
 /**
@@ -16,13 +15,12 @@ export const urlFor = (source) => createImageUrlBuilder(config).image(source)
 // Set up the live preview subscription hook
 export const usePreviewSubscription = createPreviewSubscriptionHook(config)
 
-// Set up Portable Text serialization
-export const PortableText = createPortableTextComponent({
-  ...config,
-  // Serializers passed to @sanity/block-content-to-react
-  // (https://github.com/sanity-io/block-content-to-react)
-  serializers: {},
-})
+// Set up Portable Text components
+// Read more: https://github.com/portabletext/react-portabletext
+const components = {}
+
+// Set up Portable Text
+export const PortableText = (props) => <PortableTextComponent components={components} {...props} />
 
 // Helper function for using the current logged in user account
 export const useCurrentUser = createCurrentUserHook(config)
