@@ -2,6 +2,7 @@ import S from '@sanity/desk-tool/structure-builder'
 import Iframe from 'sanity-plugin-iframe-pane'
 
 import resolveProductionUrl from './resolveProductionUrl'
+import resolveProductionUrlById from './resolveProductionUrlById'
 
 export const getDefaultDocumentNode = () => {
   return S.document().views([
@@ -10,12 +11,14 @@ export const getDefaultDocumentNode = () => {
       .component(Iframe)
       .options({
         url: (doc) => resolveProductionUrl(doc),
+        reload: {button: true},
       })
       .title('Preview by Slug'),
     S.view
       .component(Iframe)
       .options({
-        url: (doc) => resolveProductionUrl(doc, `_id`),
+        url: (doc) => resolveProductionUrlById(doc),
+        reload: {button: true},
       })
       .title('Preview by ID'),
   ])

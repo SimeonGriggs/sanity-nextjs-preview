@@ -82,7 +82,6 @@ export async function getStaticProps({params, preview = false}) {
  * So you can't actually query by a draft _id becacuse it doesn't exist!
  */
 export default function Page({data, preview}) {
-  const {asPath} = useRouter()
   const {data: previewData} = usePreviewSubscription(data?.query, {
     params: data?.queryParams ?? {},
     // The hook needs to know what we started with, to return it immediately
@@ -97,7 +96,7 @@ export default function Page({data, preview}) {
   // Notice the optional?.chaining conditionals wrapping every piece of content. This is extremely important as you can't ever rely on a single field of data existing when Editors are creating new documents. It'll be completely blank when they start!
   return (
     <div style={{maxWidth: `20rem`, padding: `1rem`}}>
-      {preview && <Link href={`/api/exit-preview?slug=${asPath}`}>Preview Mode Activated!</Link>}
+      {preview && <Link href={`/api/exit-preview`}>Preview Mode Activated!</Link>}
       {page?.title && <h1>{page.title}</h1>}
       {page?.content && <p>{page.content}</p>}
     </div>
