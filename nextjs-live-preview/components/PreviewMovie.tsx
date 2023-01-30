@@ -2,7 +2,13 @@ import Link from "next/link";
 import { usePreview } from "../lib/sanity.preview";
 import Movie from "./Movie";
 
-export default function PreviewMovie({ query, queryParams }: { query: string, queryParams: {[key: string]: any} }) {
+export default function PreviewMovie({
+  query,
+  queryParams,
+}: {
+  query: string;
+  queryParams: { [key: string]: any };
+}) {
   const data = usePreview(null, query, queryParams);
 
   return (

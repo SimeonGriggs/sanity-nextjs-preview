@@ -29,7 +29,6 @@ export default function Home({
   preview: Boolean;
   data: SanityDocument[];
 }) {
-
   // PreviewSuspense shows while data is being fetched
   // The fetch happens inside PreviewMovies
   return preview ? (
