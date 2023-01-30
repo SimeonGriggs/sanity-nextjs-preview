@@ -1,0 +1,7 @@
+{
+  "extends": "@sanity/eslint-config-studio",
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
