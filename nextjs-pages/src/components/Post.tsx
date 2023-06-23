@@ -24,7 +24,7 @@ export default function Post({ post }: { post: SanityDocument }) {
           height={300}
           alt={post?.mainImage?.alt}
         />
-        {/* {post.body ? <PortableText value={post?.body} /> : null} */}
+        {post.body ? <PortableText value={post?.body} /> : null}
       </main>
     </>
   );

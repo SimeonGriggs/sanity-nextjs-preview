@@ -9,10 +9,8 @@ import PreviewPost from "@/components/PreviewPost";
 import { getClient } from "../../sanity/lib/getClient";
 import PreviewProvider from "../../sanity/lib/PreviewProvider";
 
-export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{
-  title,
-  mainImage,
-  body
+export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{ 
+  title, mainImage, body
 }`;
 
 // Prepare Next.js to know which routes already exist
@@ -56,5 +54,5 @@ export default function Page({
     );
   }
 
-  return <Post post={data.post} />;
+  return <Post post={data} />;
 }
