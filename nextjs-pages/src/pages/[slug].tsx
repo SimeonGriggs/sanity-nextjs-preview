@@ -1,14 +1,15 @@
 // ./nextjs-pages/src/pages/[slug].tsx
 
 import { SanityDocument } from "@sanity/client";
-import { GetStaticPaths } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { groq } from "next-sanity";
 import { client } from "../../sanity/lib/client";
 import Post from "@/components/Post";
+import dynamic from "next/dynamic";
 import PreviewPost from "@/components/PreviewPost";
 import { getClient } from "../../sanity/lib/getClient";
-import PreviewProvider from "../../sanity/lib/PreviewProvider";
 
+const PreviewProvider = dynamic(() => import("@/components/PreviewProvider"));
 export const postQuery = groq`*[_type == "post" && slug.current == $slug][0]{ 
   title, mainImage, body
 }`;
@@ -24,12 +25,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: true };
 };
 
-export const getStaticProps = async (context) => {
-  const { preview = false, previewData, params } = context;
-  const previewToken = preview ? previewData?.token : ``;
+export const getStaticProps: GetStaticProps = async (context) => {
+  const preview = context.draftMode || false;
+  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
   const client = getClient(previewToken);
 
-  const data = await client.fetch(postQuery, params);
+  const data = await client.fetch(postQuery, context.params);
 
   return { props: { data, preview, previewToken } };
 };

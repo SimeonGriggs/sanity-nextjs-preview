@@ -1,4 +1,4 @@
-// ./nextjs-pages/sanity/defaultDocumentNode.ts
+// ./nextjs-pages/sanity/desk/defaultDocumentNode.ts
 
 import {DefaultDocumentNodeResolver} from 'sanity/desk'
 import Iframe from 'sanity-plugin-iframe-pane'

@@ -5,7 +5,7 @@ import type { SanityClient } from "@sanity/client";
 
 import { apiVersion, dataset, projectId, useCdn } from "../env";
 
-export function getClient(previewToken = ''): SanityClient {
+export function getClient(previewToken?: string): SanityClient {
   const client = createClient({
     projectId,
     dataset,
