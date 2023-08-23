@@ -1,10 +1,12 @@
-// ./nextjs-app/app/_components/PreviewProvider.tsx
-
 "use client";
 
-import { getClient } from "@/sanity/lib/getClient";
-import { LiveQueryProvider } from "@sanity/preview-kit";
-import { useMemo } from "react";
+import dynamic from "next/dynamic";
+import { suspend } from "suspend-react";
+
+const LiveQueryProvider = dynamic(() => import("next-sanity/preview"));
+
+// suspend-react cache is global, so we use a unique key to avoid collisions
+const UniqueKey = Symbol("../../sanity/lib/client");
 
 export default function PreviewProvider({
   children,
@@ -13,6 +15,21 @@ export default function PreviewProvider({
   children: React.ReactNode;
   token: string;
 }) {
-  const client = useMemo(() => getClient({token}), [token]);
-  return <LiveQueryProvider client={client}>{children}</LiveQueryProvider>;
+  const { client } = suspend(
+    () => import("../../sanity/lib/client"),
+    [UniqueKey]
+  );
+  if (!token) {
+    throw new TypeError("Missing token");
+  }
+  return (
+    <LiveQueryProvider
+      client={client}
+      token={token}
+      // Uncomment below to see debug reports
+      // logger={console}
+    >
+      {children}
+    </LiveQueryProvider>
+  );
 }

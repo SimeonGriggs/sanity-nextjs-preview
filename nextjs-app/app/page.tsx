@@ -1,21 +1,20 @@
-// ./nextjs-app/app/pages/index.tsx
+// ./nextjs-app/app/page.tsx
 
-import { draftMode } from "next/headers";
-import { getCachedClient } from "@/sanity/lib/getClient";
-import { postsQuery } from "@/sanity/lib/queries";
+import { SanityDocument } from "next-sanity";
 import Posts from "@/app/_components/Posts";
+import { postsQuery } from "@/sanity/lib/queries";
+import { sanityFetch, token } from "@/sanity/lib/sanityFetch";
+import { draftMode } from "next/headers";
 import PreviewPosts from "@/app/_components/PreviewPosts";
 import PreviewProvider from "@/app/_components/PreviewProvider";
 
 export default async function Home() {
-  const preview = draftMode().isEnabled
-    ? { token: process.env.SANITY_API_READ_TOKEN }
-    : undefined;
-  const posts = await getCachedClient(preview)(postsQuery);
+  const posts = await sanityFetch<SanityDocument[]>({ query: postsQuery });
+  const isDraftMode = draftMode().isEnabled;
 
-  if (preview && preview.token) {
+  if (isDraftMode && token) {
     return (
-      <PreviewProvider token={preview.token}>
+      <PreviewProvider token={token}>
         <PreviewPosts posts={posts} />
       </PreviewProvider>
     );
