@@ -1,13 +1,9 @@
-import { createClient } from 'next-sanity'
-import { cache } from "react"
-
-import { apiVersion, dataset, projectId, useCdn } from '../env'
+import { createClient } from "next-sanity";
+import { apiVersion, dataset, projectId, useCdn } from "@/sanity/env";
 
 export const client = createClient({
-  apiVersion,
-  dataset,
   projectId,
+  dataset,
+  apiVersion, // https://www.sanity.io/docs/api-versioning
   useCdn,
-})
-
-export const cachedClient = cache(client.fetch.bind(client))
+});
