@@ -6,7 +6,7 @@ import { postsQuery } from "@/pages";
 import Posts from "./Posts";
 
 export default function PreviewPosts({ posts = [] }: { posts: SanityDocument[] }) {
-const [data] = useLiveQuery(posts, postsQuery)
+  const [data] = useLiveQuery(posts, postsQuery)
 
   return <Posts posts={data} />;
 }
