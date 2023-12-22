@@ -1,24 +1,21 @@
-// ./nextjs-app/app/page.tsx
+// ./app/page.tsx
 
 import { SanityDocument } from "next-sanity";
-import Posts from "@/app/_components/Posts";
-import { postsQuery } from "@/sanity/lib/queries";
-import { sanityFetch, token } from "@/sanity/lib/sanityFetch";
 import { draftMode } from "next/headers";
-import PreviewPosts from "@/app/_components/PreviewPosts";
-import PreviewProvider from "@/app/_components/PreviewProvider";
 
-export default async function Home() {
-  const posts = await sanityFetch<SanityDocument[]>({ query: postsQuery });
-  const isDraftMode = draftMode().isEnabled;
+import Posts from "@/components/Posts";
+import PostsPreview from "@/components/PostsPreview";
+import { loadQuery } from "@/sanity/lib/store";
+import { POSTS_QUERY } from "@/sanity/lib/queries";
 
-  if (isDraftMode && token) {
-    return (
-      <PreviewProvider token={token}>
-        <PreviewPosts posts={posts} />
-      </PreviewProvider>
-    );
-  }
+export default async function Page() {
+  const initial = await loadQuery<SanityDocument[]>(POSTS_QUERY, {}, {
+    perspective: draftMode().isEnabled ? "previewDrafts" : "published",
+  });
 
-  return <Posts posts={posts} />;
+  return draftMode().isEnabled ? (
+    <PostsPreview initial={initial} />
+  ) : (
+    <Posts posts={initial.data} />
+  )
 }

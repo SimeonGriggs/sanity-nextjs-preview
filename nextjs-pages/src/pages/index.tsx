@@ -1,53 +1,38 @@
-// ./nextjs-pages/src/pages/index.tsx
+// ./src/pages/index.tsx
 
-import { groq } from "next-sanity";
-import type { SanityDocument } from "@sanity/client";
-import Posts from "@/components/Posts";
-import { getClient } from "../../sanity/lib/getClient";
+import { SanityDocument } from "next-sanity";
 import dynamic from "next/dynamic";
-import PreviewPosts from "@/components/PreviewPosts";
-import { GetStaticProps } from "next";
 
-const PreviewProvider = dynamic(() => import("@/components/PreviewProvider"));
+import { getClient } from "../../sanity/lib/client";
+import { token } from "../../sanity/lib/token";
+import { POSTS_QUERY } from "../../sanity/lib/queries";
+import Posts from "@/components/Posts";
 
-export const postsQuery = groq`*[_type == "post" && defined(slug.current)]{
-  _id, title, slug
-}`;
+const PostsPreview = dynamic(() => import("@/components/PostsPreview"));
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const preview = context.draftMode || false;
-  const previewToken = preview ? process.env.SANITY_READ_TOKEN : ``;
-  if (preview && !previewToken) {
-    throw new Error(`Preview mode is active, but SANITY_READ_TOKEN is not set in environment variables`);
-  }
-  const client = getClient(previewToken);
-
-  const data = await client.fetch(postsQuery);
-
-  return { props: { data, preview, previewToken } };
+type PageProps = {
+  posts: SanityDocument[];
+  draftMode: boolean;
+  token: string;
 };
 
-export default function Home({
-  data,
-  preview,
-  previewToken,
-}: {
-  data: SanityDocument[];
-  preview: boolean;
-  previewToken?: string;
-}) {
-  if (preview && previewToken) {
-    return (
-      <PreviewProvider previewToken={previewToken}>
-        <PreviewPosts posts={data} />
-        <div className="prose prose-blue p-8">
-          <a href="/api/exit-preview">
-            Exit preview
-          </a>
-        </div>
-      </PreviewProvider>
-    );
-  }
-
-  return <Posts posts={data} />;
+export default function Home(props: PageProps) {
+  return props.draftMode ? (
+    <PostsPreview posts={props.posts} />
+  ) : (
+    <Posts posts={props.posts} />
+  );
 }
+
+export const getStaticProps = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? token : undefined);
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY);
+
+  return {
+    props: {
+      posts,
+      draftMode,
+      token: draftMode ? token : "",
+    },
+  };
+};

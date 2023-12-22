@@ -1,31 +1,30 @@
-// ./nextjs-pages/src/components/Post.tsx
+// ./src/components/Post.tsx
 
-import Image from "next/image";
-import Head from "next/head";
-import imageUrlBuilder from "@sanity/image-url";
-import { SanityDocument } from "@sanity/client";
+import Image from "next/image"
 import { PortableText } from "@portabletext/react";
-import { client } from "../../sanity/lib/client";
+import imageUrlBuilder from "@sanity/image-url";
+import { SanityDocument } from "next-sanity";
 
-const builder = imageUrlBuilder(client);
+import { dataset, projectId } from "../../sanity/env";
+
+const builder = imageUrlBuilder({ projectId, dataset });
 
 export default function Post({ post }: { post: SanityDocument }) {
+  const { title, mainImage, body } = post;
+
   return (
-    <>
-      <Head>
-        <title>{post.title}</title>
-      </Head>
-      <main className="container mx-auto prose prose-lg p-4">
-        <h1>{post.title}</h1>
-        {post?.mainImage ? <Image
+    <main className="container mx-auto prose prose-lg p-4">
+      {title ? <h1>{title}</h1> : null}
+      {mainImage ? (
+        <Image
           className="float-left m-0 w-1/3 mr-4 rounded-lg"
-          src={builder.image(post.mainImage).width(300).height(300).url()}
+          src={builder.image(mainImage).width(300).height(300).quality(80).url()}
           width={300}
           height={300}
-          alt={post?.mainImage?.alt}
-        /> : null}
-        {post?.body ? <PortableText value={post.body} /> : null}
-      </main>
-    </>
+          alt={mainImage.alt || ''}
+        />
+      ) : null}
+      {body ? <PortableText value={body} /> : null}
+    </main>
   );
 }

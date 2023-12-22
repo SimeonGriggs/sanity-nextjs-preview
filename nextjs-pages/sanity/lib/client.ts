@@ -1,10 +1,21 @@
-import { createClient } from 'next-sanity'
+// ./sanity/lib/client.ts
 
-import { apiVersion, dataset, projectId, useCdn } from '../env'
+import type { SanityClient } from 'next-sanity'
+import { createClient } from "@sanity/client/stega";
 
-export const client = createClient({
-  apiVersion,
-  dataset,
-  projectId,
-  useCdn,
-})
+import { apiVersion, dataset, projectId } from '../env'
+
+export function getClient(previewToken?: string): SanityClient {
+  return createClient({
+    projectId,
+    dataset,
+    apiVersion,
+    useCdn: !previewToken,
+    perspective: previewToken ? 'previewDrafts' : 'published',
+    stega: {
+      enabled: previewToken ? true : false,
+      studioUrl: '/studio',
+    },
+    token: previewToken
+  })
+}
