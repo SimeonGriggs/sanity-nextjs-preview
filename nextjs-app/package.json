@@ -9,17 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sanity/client": "^6.10.0",
+    "@sanity/client": "^6.11.1",
     "@sanity/image-url": "^1.0.2",
-    "@sanity/overlays": "^2.3.0",
-    "@sanity/react-loader": "^1.6.4",
-    "@sanity/vision": "^3.23.1",
+    "@sanity/overlays": "^2.3.5",
+    "@sanity/react-loader": "^1.7.4",
+    "@sanity/vision": "^3.24.1",
     "next": "14.0.4",
-    "next-sanity": "^5.5.11",
+    "next-sanity": "^7.0.10",
     "react": "^18",
     "react-dom": "^18",
-    "sanity": "^3.23.1",
-    "styled-components": "^6.1.2"
+    "sanity": "^3.24.1",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
