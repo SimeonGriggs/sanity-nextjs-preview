@@ -2,7 +2,7 @@
 
 import { draftMode } from "next/headers";
 import "./globals.css";
-import VisualEditing from "@/components/VisualEditing";
+import LiveVisualEditing from "@/components/LiveVisualEditing";
 
 export default function RootLayout({
   children,
@@ -13,7 +13,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-white">
         {children}
-        {draftMode().isEnabled && <VisualEditing />}
+        {draftMode().isEnabled && <LiveVisualEditing />}
       </body>
     </html>
   );
