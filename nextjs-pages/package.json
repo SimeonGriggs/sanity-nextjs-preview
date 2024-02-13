@@ -9,17 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sanity/client": "^6.10.0",
+    "@sanity/client": "^6.12.4",
     "@sanity/image-url": "^1.0.2",
-    "@sanity/overlays": "^2.3.0",
-    "@sanity/react-loader": "^1.6.4",
-    "@sanity/vision": "^3.23.2",
-    "next": "14.0.4",
-    "next-sanity": "^7.0.4",
+    "@sanity/react-loader": "^1.8.3",
+    "@sanity/vision": "^3.28.0",
+    "@sanity/visual-editing": "^1.2.2",
+    "next": "14.1.0",
+    "next-sanity": "^7.1.4",
     "react": "^18",
     "react-dom": "^18",
-    "sanity": "^3.23.2",
-    "styled-components": "^6.1.2"
+    "sanity": "^3.28.0",
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
@@ -28,7 +28,7 @@
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "14.0.4",
+    "eslint-config-next": "14.1.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
