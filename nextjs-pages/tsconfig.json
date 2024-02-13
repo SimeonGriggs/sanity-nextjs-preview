@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -22,6 +21,7 @@
         "./src/*"
       ]
     },
+    "target": "ES2017",
     "plugins": [
       {
         "name": "next"
