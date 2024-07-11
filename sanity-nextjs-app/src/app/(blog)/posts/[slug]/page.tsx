@@ -20,7 +20,7 @@ export async function generateStaticParams() {
   );
 
   return posts.map((post) => ({
-    slug: post.slug.current,
+    slug: post?.slug?.current,
   }));
 }
 
