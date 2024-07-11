@@ -9,7 +9,7 @@ export function Posts({ posts }: { posts: POSTS_QUERYResult }) {
         <li key={post._id}>
           <a
             className="block p-4 hover:bg-blue-50"
-            href={`/posts/${post?.slug.current}`}
+            href={`/posts/${post?.slug?.current}`}
           >
             {post?.title}
           </a>
