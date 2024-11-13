@@ -17,10 +17,14 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function Page({ params }: { params: QueryParams }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<QueryParams>;
+}) {
   const { data: post } = await sanityFetch({
     query: POST_QUERY,
-    params,
+    params: await params,
   });
   if (!post) {
     return notFound();
