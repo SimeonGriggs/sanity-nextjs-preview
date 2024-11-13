@@ -1,4 +1,4 @@
-// ./src/components/Posts.tsx
+// src/components/Posts.tsx
 
 import { POSTS_QUERYResult } from "../../sanity.types";
 

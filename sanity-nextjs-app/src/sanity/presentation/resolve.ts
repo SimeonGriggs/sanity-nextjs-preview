@@ -1,4 +1,4 @@
-// ./src/sanity/presentation/resolve.ts
+// src/sanity/presentation/resolve.ts
 
 import {
   defineLocations,
