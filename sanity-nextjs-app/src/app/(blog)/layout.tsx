@@ -1,26 +1,26 @@
-// ./src/app/(blog)/layout.tsx
+// src/app/(blog)/layout.tsx
 
+import { SanityLive } from "@/sanity/lib/live";
+import { DisableDraftMode } from "@/components/DisableDraftMode";
 import { VisualEditing } from "next-sanity";
 import { draftMode } from "next/headers";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body>
-        {draftMode().isEnabled && (
-          <a
-            className="fixed right-0 bottom-0 bg-blue-500 text-white p-4 m-4"
-            href="/api/draft-mode/disable"
-          >
-            Disable preview mode
-          </a>
-        )}
+      <body className="min-h-screen bg-white">
         {children}
-        {draftMode().isEnabled && <VisualEditing />}
+        <SanityLive />
+        {(await draftMode()).isEnabled && (
+          <>
+            <DisableDraftMode />
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

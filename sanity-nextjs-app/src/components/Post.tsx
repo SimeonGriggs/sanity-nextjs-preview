@@ -1,11 +1,10 @@
-// ./src/components/Post.tsx
+// src/components/Post.tsx
 
 import Image from "next/image";
+import Link from "next/link";
 import { PortableText } from "@portabletext/react";
-
 import { urlFor } from "@/sanity/lib/image";
 import { POST_QUERYResult } from "../../sanity.types";
-import Link from "next/link";
 
 export function Post({ post }: { post: POST_QUERYResult }) {
   const { title, mainImage, body } = post || {};
