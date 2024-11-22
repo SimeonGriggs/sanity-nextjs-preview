@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/sanity/lib/image";
+import { RelatedPosts } from "./RelatedPosts";
 import { POST_QUERYResult } from "../../sanity.types";
 
-export function Post({ post }: { post: POST_QUERYResult }) {
-  const { title, mainImage, body } = post || {};
+export function Post({ post }: { post: NonNullable<POST_QUERYResult> }) {
+  const { _id, _type, title, mainImage, body, relatedPosts } = post;
 
   return (
     <main className="container mx-auto prose prose-lg p-4">
@@ -22,6 +23,13 @@ export function Post({ post }: { post: POST_QUERYResult }) {
         />
       ) : null}
       {body ? <PortableText value={body} /> : null}
+      {relatedPosts ? (
+        <RelatedPosts
+          relatedPosts={relatedPosts}
+          documentId={_id}
+          documentType={_type}
+        />
+      ) : null}
       <hr />
       <Link href="/">&larr; Return home</Link>
     </main>

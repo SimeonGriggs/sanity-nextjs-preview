@@ -9,5 +9,13 @@ export const POSTS_QUERY =
 
 export const POST_QUERY =
   defineQuery(`*[_type == "post" && slug.current == $slug][0]{
-  title, body, mainImage
+  _id,
+  _type,
+  title,
+  body,
+  mainImage,
+  relatedPosts[]{
+    _key, // required for drag and drop
+    ...@->{_id, title, slug} // get fields from the referenced post
+  }
 }`);

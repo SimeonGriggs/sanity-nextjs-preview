@@ -132,6 +132,13 @@ export type Post = {
     _type: "image";
     _key: string;
   }>;
+  relatedPosts?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "post";
+  }>;
 };
 
 export type Author = {
@@ -289,8 +296,10 @@ export type POSTS_QUERYResult = Array<{
   slug: Slug | null;
 }>;
 // Variable: POST_QUERY
-// Query: *[_type == "post" && slug.current == $slug][0]{  title, body, mainImage}
+// Query: *[_type == "post" && slug.current == $slug][0]{  _id,  _type,  title,  body,  mainImage,  relatedPosts[]{    _key, // required for drag and drop    ...@->{_id, title, slug} // get fields from the referenced post  }}
 export type POST_QUERYResult = {
+  _id: string;
+  _type: "post";
   title: string | null;
   body: Array<{
     children?: Array<{
@@ -334,6 +343,12 @@ export type POST_QUERYResult = {
     alt?: string;
     _type: "image";
   } | null;
+  relatedPosts: Array<{
+    _key: string;
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+  }> | null;
 } | null;
 
 // Query TypeMap
@@ -341,6 +356,6 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"post\" && defined(slug.current)][0...12]{\n  _id, title, slug\n}": POSTS_QUERYResult;
-    "*[_type == \"post\" && slug.current == $slug][0]{\n  title, body, mainImage\n}": POST_QUERYResult;
+    "*[_type == \"post\" && slug.current == $slug][0]{\n  _id,\n  _type,\n  title,\n  body,\n  mainImage,\n  relatedPosts[]{\n    _key, // required for drag and drop\n    ...@->{_id, title, slug} // get fields from the referenced post\n  }\n}": POST_QUERYResult;
   }
 }
